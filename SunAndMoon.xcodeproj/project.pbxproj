@@ -6,8 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3287AFC22E38133A00F13461 /* SunKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3287AFC12E38133A00F13461 /* SunKit */; };
+		3287AFC52E38135000F13461 /* MoonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3287AFC42E38135000F13461 /* MoonKit */; };
+		3287AFCA2E384F7200F13461 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 3287AFC92E384F6400F13461 /* .gitignore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		32324BA52E37F12100B07B59 /* SunAndMoon Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SunAndMoon Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3287AFC92E384F6400F13461 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -23,6 +30,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3287AFC52E38135000F13461 /* MoonKit in Frameworks */,
+				3287AFC22E38133A00F13461 /* SunKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -32,6 +41,7 @@
 		32324B9C2E37F12100B07B59 = {
 			isa = PBXGroup;
 			children = (
+				3287AFC92E384F6400F13461 /* .gitignore */,
 				32324BA72E37F12100B07B59 /* SunAndMoon Watch App */,
 				32324BA62E37F12100B07B59 /* Products */,
 			);
@@ -65,6 +75,8 @@
 			);
 			name = "SunAndMoon Watch App";
 			packageProductDependencies = (
+				3287AFC12E38133A00F13461 /* SunKit */,
+				3287AFC42E38135000F13461 /* MoonKit */,
 			);
 			productName = "SunAndMoon Watch App";
 			productReference = 32324BA52E37F12100B07B59 /* SunAndMoon Watch App.app */;
@@ -94,6 +106,10 @@
 			);
 			mainGroup = 32324B9C2E37F12100B07B59;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3287AFC02E38133A00F13461 /* XCRemoteSwiftPackageReference "SunKit" */,
+				3287AFC32E38135000F13461 /* XCRemoteSwiftPackageReference "MoonKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 32324BA62E37F12100B07B59 /* Products */;
 			projectDirPath = "";
@@ -109,6 +125,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3287AFCA2E384F7200F13461 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +339,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3287AFC02E38133A00F13461 /* XCRemoteSwiftPackageReference "SunKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SunKit-Swift/SunKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.1;
+			};
+		};
+		3287AFC32E38135000F13461 /* XCRemoteSwiftPackageReference "MoonKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/davideilmito/MoonKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3287AFC12E38133A00F13461 /* SunKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3287AFC02E38133A00F13461 /* XCRemoteSwiftPackageReference "SunKit" */;
+			productName = SunKit;
+		};
+		3287AFC42E38135000F13461 /* MoonKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3287AFC32E38135000F13461 /* XCRemoteSwiftPackageReference "MoonKit" */;
+			productName = MoonKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 32324B9D2E37F12100B07B59 /* Project object */;
 }
