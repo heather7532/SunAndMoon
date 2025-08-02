@@ -7,31 +7,145 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		321D91072E3DE39700D647D5 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 321D91062E3DE39700D647D5 /* WidgetKit.framework */; };
+		321D91092E3DE39700D647D5 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 321D91082E3DE39700D647D5 /* SwiftUI.framework */; };
+		321D91142E3DE39800D647D5 /* SunAndMoonWidgetExtensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 321D91052E3DE39700D647D5 /* SunAndMoonWidgetExtensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		321D911F2E3DE9DB00D647D5 /* SunKit in Frameworks */ = {isa = PBXBuildFile; productRef = 321D911E2E3DE9DB00D647D5 /* SunKit */; };
+		321D91212E3DE9DB00D647D5 /* MoonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 321D91202E3DE9DB00D647D5 /* MoonKit */; };
+		326210032E3DCEAC005C643B /* SunAndMoon Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 32324BA52E37F12100B07B59 /* SunAndMoon Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3287AFC22E38133A00F13461 /* SunKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3287AFC12E38133A00F13461 /* SunKit */; };
 		3287AFC52E38135000F13461 /* MoonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3287AFC42E38135000F13461 /* MoonKit */; };
 		3287AFCA2E384F7200F13461 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 3287AFC92E384F6400F13461 /* .gitignore */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		321D91122E3DE39800D647D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 32324B9D2E37F12100B07B59 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 321D91042E3DE39700D647D5;
+			remoteInfo = SunAndMoonWidgetExtensionExtension;
+		};
+		326210042E3DCF7E005C643B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 32324B9D2E37F12100B07B59 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 32324BA42E37F12100B07B59;
+			remoteInfo = "SunAndMoon Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		321D91192E3DE39800D647D5 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				321D91142E3DE39800D647D5 /* SunAndMoonWidgetExtensionExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		326210002E3DCAB0005C643B /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				326210032E3DCEAC005C643B /* SunAndMoon Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		321D91052E3DE39700D647D5 /* SunAndMoonWidgetExtensionExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SunAndMoonWidgetExtensionExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		321D91062E3DE39700D647D5 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		321D91082E3DE39700D647D5 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		32324BA52E37F12100B07B59 /* SunAndMoon Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SunAndMoon Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		32620FF12E3DCA6C005C643B /* SunAndMoonContainer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SunAndMoonContainer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3287AFC92E384F6400F13461 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		321D91182E3DE39800D647D5 /* Exceptions for "SunAndMoonWidgetExtension" folder in "SunAndMoonWidgetExtensionExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 321D91042E3DE39700D647D5 /* SunAndMoonWidgetExtensionExtension */;
+		};
+		321D911C2E3DE87E00D647D5 /* Exceptions for "SunAndMoon Watch App" folder in "SunAndMoonWidgetExtensionExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AstronomyService.swift,
+				LocationService.swift,
+			);
+			target = 321D91042E3DE39700D647D5 /* SunAndMoonWidgetExtensionExtension */;
+		};
+		326210092E3DD2FE005C643B /* Exceptions for "SunAndMoonContainer" folder in "SunAndMoonContainer" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 32620FF02E3DCA6C005C643B /* SunAndMoonContainer */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		321D910A2E3DE39700D647D5 /* SunAndMoonWidgetExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				321D91182E3DE39800D647D5 /* Exceptions for "SunAndMoonWidgetExtension" folder in "SunAndMoonWidgetExtensionExtension" target */,
+			);
+			path = SunAndMoonWidgetExtension;
+			sourceTree = "<group>";
+		};
 		32324BA72E37F12100B07B59 /* SunAndMoon Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				321D911C2E3DE87E00D647D5 /* Exceptions for "SunAndMoon Watch App" folder in "SunAndMoonWidgetExtensionExtension" target */,
+			);
 			path = "SunAndMoon Watch App";
+			sourceTree = "<group>";
+		};
+		32620FF22E3DCA6C005C643B /* SunAndMoonContainer */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				326210092E3DD2FE005C643B /* Exceptions for "SunAndMoonContainer" folder in "SunAndMoonContainer" target */,
+			);
+			path = SunAndMoonContainer;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		321D91022E3DE39700D647D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				321D91212E3DE9DB00D647D5 /* MoonKit in Frameworks */,
+				321D91092E3DE39700D647D5 /* SwiftUI.framework in Frameworks */,
+				321D91072E3DE39700D647D5 /* WidgetKit.framework in Frameworks */,
+				321D911F2E3DE9DB00D647D5 /* SunKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		32324BA22E37F12100B07B59 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				3287AFC52E38135000F13461 /* MoonKit in Frameworks */,
 				3287AFC22E38133A00F13461 /* SunKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		32620FEE2E3DCA6C005C643B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +157,9 @@
 			children = (
 				3287AFC92E384F6400F13461 /* .gitignore */,
 				32324BA72E37F12100B07B59 /* SunAndMoon Watch App */,
+				32620FF22E3DCA6C005C643B /* SunAndMoonContainer */,
+				321D910A2E3DE39700D647D5 /* SunAndMoonWidgetExtension */,
+				32620FFC2E3DCAB0005C643B /* Frameworks */,
 				32324BA62E37F12100B07B59 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -51,13 +168,48 @@
 			isa = PBXGroup;
 			children = (
 				32324BA52E37F12100B07B59 /* SunAndMoon Watch App.app */,
+				32620FF12E3DCA6C005C643B /* SunAndMoonContainer.app */,
+				321D91052E3DE39700D647D5 /* SunAndMoonWidgetExtensionExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		32620FFC2E3DCAB0005C643B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				321D91062E3DE39700D647D5 /* WidgetKit.framework */,
+				321D91082E3DE39700D647D5 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		321D91042E3DE39700D647D5 /* SunAndMoonWidgetExtensionExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 321D91152E3DE39800D647D5 /* Build configuration list for PBXNativeTarget "SunAndMoonWidgetExtensionExtension" */;
+			buildPhases = (
+				321D91012E3DE39700D647D5 /* Sources */,
+				321D91022E3DE39700D647D5 /* Frameworks */,
+				321D91032E3DE39700D647D5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				321D910A2E3DE39700D647D5 /* SunAndMoonWidgetExtension */,
+			);
+			name = SunAndMoonWidgetExtensionExtension;
+			packageProductDependencies = (
+				321D911E2E3DE9DB00D647D5 /* SunKit */,
+				321D91202E3DE9DB00D647D5 /* MoonKit */,
+			);
+			productName = SunAndMoonWidgetExtensionExtension;
+			productReference = 321D91052E3DE39700D647D5 /* SunAndMoonWidgetExtensionExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		32324BA42E37F12100B07B59 /* SunAndMoon Watch App */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 32324BB02E37F12200B07B59 /* Build configuration list for PBXNativeTarget "SunAndMoon Watch App" */;
@@ -65,10 +217,12 @@
 				32324BA12E37F12100B07B59 /* Sources */,
 				32324BA22E37F12100B07B59 /* Frameworks */,
 				32324BA32E37F12100B07B59 /* Resources */,
+				321D91192E3DE39800D647D5 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				321D91132E3DE39800D647D5 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				32324BA72E37F12100B07B59 /* SunAndMoon Watch App */,
@@ -82,6 +236,30 @@
 			productReference = 32324BA52E37F12100B07B59 /* SunAndMoon Watch App.app */;
 			productType = "com.apple.product-type.application";
 		};
+		32620FF02E3DCA6C005C643B /* SunAndMoonContainer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 32620FF92E3DCA6D005C643B /* Build configuration list for PBXNativeTarget "SunAndMoonContainer" */;
+			buildPhases = (
+				32620FED2E3DCA6C005C643B /* Sources */,
+				32620FEE2E3DCA6C005C643B /* Frameworks */,
+				32620FEF2E3DCA6C005C643B /* Resources */,
+				326210002E3DCAB0005C643B /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				326210052E3DCF7E005C643B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				32620FF22E3DCA6C005C643B /* SunAndMoonContainer */,
+			);
+			name = SunAndMoonContainer;
+			packageProductDependencies = (
+			);
+			productName = SunAndMoonContainer;
+			productReference = 32620FF12E3DCA6C005C643B /* SunAndMoonContainer.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -92,7 +270,13 @@
 				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
+					321D91042E3DE39700D647D5 = {
+						CreatedOnToolsVersion = 16.3;
+					};
 					32324BA42E37F12100B07B59 = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					32620FF02E3DCA6C005C643B = {
 						CreatedOnToolsVersion = 16.3;
 					};
 				};
@@ -116,11 +300,20 @@
 			projectRoot = "";
 			targets = (
 				32324BA42E37F12100B07B59 /* SunAndMoon Watch App */,
+				32620FF02E3DCA6C005C643B /* SunAndMoonContainer */,
+				321D91042E3DE39700D647D5 /* SunAndMoonWidgetExtensionExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		321D91032E3DE39700D647D5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		32324BA32E37F12100B07B59 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -129,10 +322,31 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		32620FEF2E3DCA6C005C643B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		321D91012E3DE39700D647D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		32324BA12E37F12100B07B59 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		32620FED2E3DCA6C005C643B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -141,7 +355,81 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		321D91132E3DE39800D647D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 321D91042E3DE39700D647D5 /* SunAndMoonWidgetExtensionExtension */;
+			targetProxy = 321D91122E3DE39800D647D5 /* PBXContainerItemProxy */;
+		};
+		326210052E3DCF7E005C643B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 32324BA42E37F12100B07B59 /* SunAndMoon Watch App */;
+			targetProxy = 326210042E3DCF7E005C643B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		321D91162E3DE39800D647D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HTL58UF482;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SunAndMoonWidgetExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SunAndMoonWidgetExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alpenlogic.SunAndMoonContainer.watchkitapp.SunAndMoonWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Debug;
+		};
+		321D91172E3DE39800D647D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HTL58UF482;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SunAndMoonWidgetExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SunAndMoonWidgetExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alpenlogic.SunAndMoonContainer.watchkitapp.SunAndMoonWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Release;
+		};
 		32324BAE2E37F12200B07B59 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -268,22 +556,25 @@
 				DEVELOPMENT_TEAM = HTL58UF482;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = SunAndMoon;
+				INFOPLIST_FILE = "SunAndMoon-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Sun And Moon";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to determine sunrise and sunset times.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				INFOPLIST_KEY_WKWatchOnly = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = .watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alpenlogic.SunAndMoonContainer.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Debug;
 		};
@@ -297,15 +588,18 @@
 				DEVELOPMENT_TEAM = HTL58UF482;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = SunAndMoon;
+				INFOPLIST_FILE = "SunAndMoon-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Sun And Moon";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to determine sunrise and sunset times.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				INFOPLIST_KEY_WKWatchOnly = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = .watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alpenlogic.SunAndMoonContainer.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -313,13 +607,97 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				VALIDATE_PRODUCT = YES;
-				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Release;
+		};
+		32620FFA2E3DCA6D005C643B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HTL58UF482;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SunAndMoonContainer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Sun And Moon";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alpenlogic.SunAndMoonContainer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		32620FFB2E3DCA6D005C643B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HTL58UF482;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SunAndMoonContainer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Sun And Moon";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alpenlogic.SunAndMoonContainer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		321D91152E3DE39800D647D5 /* Build configuration list for PBXNativeTarget "SunAndMoonWidgetExtensionExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				321D91162E3DE39800D647D5 /* Debug */,
+				321D91172E3DE39800D647D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		32324BA02E37F12100B07B59 /* Build configuration list for PBXProject "SunAndMoon" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -334,6 +712,15 @@
 			buildConfigurations = (
 				32324BB12E37F12200B07B59 /* Debug */,
 				32324BB22E37F12200B07B59 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		32620FF92E3DCA6D005C643B /* Build configuration list for PBXNativeTarget "SunAndMoonContainer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				32620FFA2E3DCA6D005C643B /* Debug */,
+				32620FFB2E3DCA6D005C643B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -360,6 +747,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		321D911E2E3DE9DB00D647D5 /* SunKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3287AFC02E38133A00F13461 /* XCRemoteSwiftPackageReference "SunKit" */;
+			productName = SunKit;
+		};
+		321D91202E3DE9DB00D647D5 /* MoonKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3287AFC32E38135000F13461 /* XCRemoteSwiftPackageReference "MoonKit" */;
+			productName = MoonKit;
+		};
 		3287AFC12E38133A00F13461 /* SunKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3287AFC02E38133A00F13461 /* XCRemoteSwiftPackageReference "SunKit" */;
