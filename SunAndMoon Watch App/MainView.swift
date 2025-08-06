@@ -10,20 +10,32 @@ import CoreLocation
 import SunKit
 import MoonKit
 
+private func symbolNameForPhase(_ phase: MoonPhase) -> String {
+    let raw = phase.rawValue
 
+    // Convert camelCase to dot.case
+    let dotted = raw
+        .replacingOccurrences(of: "([a-z])([A-Z])", with: "$1.$2", options: .regularExpression)
+        .replacingOccurrences(of: " ", with: ".")
+        .lowercased()
+
+    let symbolName = "moonphase.\(dotted)"
+    print("Resolved SF Symbol for phase '\(raw)': \(symbolName)")
+    return symbolName
+}
 
 struct MainView: View {
     @StateObject private var locationService = LocationService()
     @State private var heading: Double = 0.0
     @State private var sun: Sun?
     @State private var moon: Moon?
-
+    
     private let timeZone = TimeZone.current
     private var astronomyService: AstronomyService? {
         guard let location = locationService.currentLocation else { return nil }
         return AstronomyService(location: location, timeZone: timeZone)
     }
-
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 8) {
@@ -44,9 +56,9 @@ struct MainView: View {
                         highlight: isHeadingAligned(to: sun.azimuth.degrees)
                     )
                     DataRow(label: "Sun Altitude", value: formattedAngle(sun.altitude.degrees))
-
+                    
                     Divider().padding(.vertical, 6)
-
+                    
                     // Moon section
                     SectionHeader(title: "Moon")
                     DataRow(label: "Moonrise", value: moon.moonRise?.formattedTime() ?? "--:--")
@@ -59,7 +71,12 @@ struct MainView: View {
                     DataRow(label: "Moon Altitude", value: formattedAngle(moon.altitude))
                     DataRow(label: "New Moon", value: formattedDate(from: formattedDateFromNow(days: moon.nextNewMoon)))
                     DataRow(label: "Full Moon", value: formattedDate(from: formattedDateFromNow(days: moon.nextFullMoon)))
-                    MoonPhaseRow(phase: moon.currentMoonPhase)
+                    MoonPhaseRow(
+                        phaseName: moon.currentMoonPhase.rawValue,
+                        phasePercent: CGFloat(moon.moonPercentage),
+                        moonAge: CGFloat(moon.ageOfTheMoonInDays),
+                        latitude: locationService.currentLocation?.coordinate.latitude ?? 0.0
+                    )
                 } else {
                     Text("Fetching location and data...")
                         .font(.footnote)
@@ -74,7 +91,7 @@ struct MainView: View {
             locationService.startHeadingUpdates { newHeading in
                 self.heading = newHeading
             }
-
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 refreshAstronomyData()
             }
@@ -83,13 +100,13 @@ struct MainView: View {
             refreshAstronomyData()
         }
     }
-
+    
     // MARK: - Helpers
     
     struct ImageRow: View {
         let label: String
         let imageName: String
-
+        
         var body: some View {
             HStack {
                 Text(label)
@@ -118,16 +135,16 @@ struct MainView: View {
     
     private func formattedDate(from date: Date?) -> String {
         guard let date = date else { return "--" }
-
+        
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
         let full = formatter.string(from: date)
-
+        
         let calendar = Calendar.current
         let currentYear = calendar.component(.year, from: Date())
         let dateYear = calendar.component(.year, from: date)
-
+        
         if currentYear == dateYear {
             // Strip the year from the formatted date
             return full.replacingOccurrences(of: String(currentYear), with: "")
@@ -137,7 +154,7 @@ struct MainView: View {
             return full
         }
     }
-
+    
     private func formattedDateFromNow(days: Int?) -> Date? {
         guard let days = days else { return nil }
         return Calendar.current.date(byAdding: .day, value: days, to: Date())
@@ -148,45 +165,52 @@ struct MainView: View {
         sun = service.getCurrentSun()
         moon = service.getCurrentMoon()
     }
-
+    
     private func formattedAngle(_ angle: Double?) -> String {
         guard let angle = angle else { return "--°" }
         return "\(Int(angle.rounded()))°"
     }
-
+    
     private func isHeadingAligned(to azimuth: Double?) -> Bool {
         guard let azimuth = azimuth else { return false }
         return abs(heading - azimuth).truncatingRemainder(dividingBy: 360) <= 5
     }
     
-    private func symbolNameForPhase(_ phase: MoonPhase) -> String {
-        phase.rawValue
-            .lowercased()
-            .replacingOccurrences(of: " ", with: ".")
-            .replacingOccurrences(of: "moon", with: "moonphase")
-    }
-
     struct MoonPhaseRow: View {
-        let phase: MoonPhase
+        let phaseName: String       // moon.currentMoonPhase.rawValue
+        let phasePercent: CGFloat   // moon.moonPercentage (0.0 to 1.0)
+        let moonAge: CGFloat        // moon.ageOfInDays
+        let latitude: CLLocationDegrees
+
+        @State private var moonImage: CGImage?
 
         var body: some View {
             HStack {
-                Text(phase.rawValue)
+                Text(phaseName)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Image(systemName: symbolName(for: phase))
+
+                if let moonImage = moonImage {
+                    MoonRendererWatch(
+                        latitude: latitude,
+                        phasePercent: phasePercent,
+                        moonAge: moonAge,
+                        fullMoonCG: moonImage
+                    )
                     .resizable()
-                    .scaledToFit()
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: 24, height: 24)
-                    .accessibilityLabel(Text(phase.rawValue))
+                    .accessibilityLabel(Text(phaseName))
+                } else {
+                    ProgressView()
+                        .frame(width: 24, height: 24)
+                }
             }
             .font(.footnote)
-        }
-
-        private func symbolName(for phase: MoonPhase) -> String {
-            let base = phase.rawValue
-                .lowercased()
-                .replacingOccurrences(of: " ", with: ".")
-            return "moonphase.\(base)"
+            .onAppear {
+                if let image = UIImage(named: "fullmoon")?.cgImage {
+                    self.moonImage = image
+                }
+            }
         }
     }
 }
@@ -216,7 +240,6 @@ extension Date {
         return formatter.string(from: self)
     }
 }
-
 
 // MARK: - Subviews
 struct SectionHeader: View {
@@ -267,5 +290,3 @@ struct ValueRow: View {
 #Preview {
     MainView()
 }
-
-

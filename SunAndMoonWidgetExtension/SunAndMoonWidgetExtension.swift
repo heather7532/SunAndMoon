@@ -24,7 +24,8 @@ struct Provider: TimelineProvider {
             entries.append(makeEntry(for: date))
         }
 
-        completion(Timeline(entries: entries, policy: .atEnd))
+        let nextUpdate = Calendar.current.date(byAdding: .minute, value: 10, to: currentDate)!
+        completion(Timeline(entries: entries, policy: .after(nextUpdate)))
     }
 
     private func makeEntry(for date: Date) -> SimpleEntry {
@@ -83,8 +84,8 @@ struct SunAndMoonWidgetExtensionEntryView: View {
                 let hours = minutes / 60
                 let mins = minutes % 60
                 Text(String(format: "%d:%02d", hours, mins))
-                    .font(.system(size: 16, weight: .heavy))
-                    .foregroundColor(timeInfo.color)
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(timeInfo.color)
             } else {
                 Text("--")
             }
@@ -108,7 +109,7 @@ struct SunAndMoonWidgetExtensionEntryView: View {
 
                     Text(combined.capitalized)
                         .font(.system(size: 14, weight: .bold))
-                        .foregroundColor(timeInfo.color)
+                        .foregroundStyle(timeInfo.color)
                 } else {
                     Text("--")
                 }
