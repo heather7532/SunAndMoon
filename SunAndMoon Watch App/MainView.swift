@@ -29,71 +29,92 @@ struct MainView: View {
     @State private var heading: Double = 0.0
     @State private var sun: Sun?
     @State private var moon: Moon?
-    
+    @State private var navSelection: MoonNavigation?
+    @State private var moonImage: CGImage?
+
     private let timeZone = TimeZone.current
     private var astronomyService: AstronomyService? {
         guard let location = locationService.currentLocation else { return nil }
         return AstronomyService(location: location, timeZone: timeZone)
     }
-    
+
     var body: some View {
-        ScrollView {
-            VStack(spacing: 8) {
-                if let sun = sun, let moon = moon {
-                    // Daylight section
-                    SectionHeader(title: "Sun")
-                    DataRow(label: "Nautical Dawn", value: sun.nauticalDawn.formattedTime())
-                    DataRow(label: "Civil Dawn", value: sun.civilDawn.formattedTime())
-                    DataRow(label: "Sunrise", value: sun.sunrise.formattedTime())
-                    DataRow(label: "Sunset", value: sun.sunset.formattedTime())
-                    DataRow(label: "Civil Dusk", value: sun.civilDusk.formattedTime())
-                    DataRow(label: "Nautical Dusk", value: sun.nauticalDusk.formattedTime())
-                    DataRow(label: "Day Duration", value: sun.totalDayLightTime.toHourMinuteString())
-                    DataRow(label: "Night Duration", value: sun.totalNightTime.toHourMinuteString())
-                    DataRow(
-                        label: "Sun Azimuth",
-                        value: formattedAngle(sun.azimuth.degrees),
-                        highlight: isHeadingAligned(to: sun.azimuth.degrees)
-                    )
-                    DataRow(label: "Sun Altitude", value: formattedAngle(sun.altitude.degrees))
-                    
-                    Divider().padding(.vertical, 6)
-                    
-                    // Moon section
-                    SectionHeader(title: "Moon")
-                    DataRow(label: "Moonrise", value: moon.moonRise?.formattedTime() ?? "--:--")
-                    DataRow(label: "Moonset", value: moon.moonSet?.formattedTime() ?? "--:--")
-                    DataRow(
-                        label: "Moon Azimuth",
-                        value: formattedAngle(moon.azimuth),
-                        highlight: isHeadingAligned(to: moon.azimuth)
-                    )
-                    DataRow(label: "Moon Altitude", value: formattedAngle(moon.altitude))
-                    DataRow(label: "New Moon", value: formattedDate(from: formattedDateFromNow(days: moon.nextNewMoon)))
-                    DataRow(label: "Full Moon", value: formattedDate(from: formattedDateFromNow(days: moon.nextFullMoon)))
-                    MoonPhaseRow(
-                        phaseName: moon.currentMoonPhase.rawValue,
-                        phasePercent: CGFloat(moon.moonPercentage),
-                        moonAge: CGFloat(moon.ageOfTheMoonInDays),
-                        latitude: locationService.currentLocation?.coordinate.latitude ?? 0.0
-                    )
-                } else {
-                    Text("Fetching location and data...")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                        .padding(.top, 20)
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 8) {
+                    if let sun = sun, let moon = moon {
+                        SectionHeader(title: "Sun")
+                        DataRow(label: "Nautical Dawn", value: sun.nauticalDawn.formattedTime())
+                        DataRow(label: "Civil Dawn", value: sun.civilDawn.formattedTime())
+                        DataRow(label: "Sunrise", value: sun.sunrise.formattedTime())
+                        DataRow(label: "Sunset", value: sun.sunset.formattedTime())
+                        DataRow(label: "Civil Dusk", value: sun.civilDusk.formattedTime())
+                        DataRow(label: "Nautical Dusk", value: sun.nauticalDusk.formattedTime())
+                        DataRow(label: "Day Duration", value: sun.totalDayLightTime.toHourMinuteString())
+                        DataRow(label: "Night Duration", value: sun.totalNightTime.toHourMinuteString())
+                        DataRow(
+                            label: "Sun Azimuth",
+                            value: formattedAngle(sun.azimuth.degrees),
+                            highlight: isHeadingAligned(to: sun.azimuth.degrees)
+                        )
+                        DataRow(label: "Sun Altitude", value: formattedAngle(sun.altitude.degrees))
+
+                        Divider().padding(.vertical, 6)
+
+                        SectionHeader(title: "Moon")
+                        DataRow(label: "Moonrise", value: moon.moonRise?.formattedTime() ?? "--:--")
+                        DataRow(label: "Moonset", value: moon.moonSet?.formattedTime() ?? "--:--")
+                        DataRow(
+                            label: "Moon Azimuth",
+                            value: formattedAngle(moon.azimuth),
+                            highlight: isHeadingAligned(to: moon.azimuth)
+                        )
+                        DataRow(label: "Moon Altitude", value: formattedAngle(moon.altitude))
+                        DataRow(label: "New Moon", value: formattedDate(from: formattedDateFromNow(days: moon.nextNewMoon)))
+                        DataRow(label: "Full Moon", value: formattedDate(from: formattedDateFromNow(days: moon.nextFullMoon)))
+                        MoonPhaseRow(
+                            phaseName: moon.currentMoonPhase.rawValue,
+                            phasePercent: CGFloat(moon.moonPercentage/100),
+                            moonAge: CGFloat(moon.ageOfTheMoonInDays),
+                            latitude: locationService.currentLocation?.coordinate.latitude ?? 0.0,
+                            moonImage: moonImage,
+                        )
+                    } else {
+                        Text("Fetching location and data...")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .padding(.top, 20)
+                    }
+                }
+                .padding()
+            }
+            .navigationDestination(for: MoonNavigation.self) { selection in
+                switch selection {
+                case .slider(let latitude, let moonAge):
+                    if let moonImage = moonImage {
+                        MoonPhaseSliderView(
+                            latitude: latitude,
+                            fullMoonCG: moonImage,
+                            initialMoonAge: moonAge
+                        )
+                    } else {
+                        Text("Moon image not available")
+                    }
                 }
             }
-            .padding()
         }
         .onAppear {
             locationService.fetchLocationIfAuthorized()
             locationService.startHeadingUpdates { newHeading in
                 self.heading = newHeading
             }
-            
+
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 refreshAstronomyData()
+            }
+
+            if let image = UIImage(named: "fullmoon")?.cgImage {
+                self.moonImage = image
             }
         }
         .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { _ in
@@ -176,13 +197,17 @@ struct MainView: View {
         return abs(heading - azimuth).truncatingRemainder(dividingBy: 360) <= 5
     }
     
-    struct MoonPhaseRow: View {
-        let phaseName: String       // moon.currentMoonPhase.rawValue
-        let phasePercent: CGFloat   // moon.moonPercentage (0.0 to 1.0)
-        let moonAge: CGFloat        // moon.ageOfInDays
-        let latitude: CLLocationDegrees
 
-        @State private var moonImage: CGImage?
+    enum MoonNavigation: Hashable {
+        case slider(latitude: CLLocationDegrees, moonAge: CGFloat)
+    }
+
+    struct MoonPhaseRow: View {
+        let phaseName: String
+        let phasePercent: CGFloat
+        let moonAge: CGFloat
+        let latitude: CLLocationDegrees
+        let moonImage: CGImage?
 
         var body: some View {
             HStack {
@@ -190,27 +215,25 @@ struct MainView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
 
                 if let moonImage = moonImage {
-                    MoonRendererWatch(
-                        latitude: latitude,
-                        phasePercent: phasePercent,
-                        moonAge: moonAge,
-                        fullMoonCG: moonImage
-                    )
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 24, height: 24)
-                    .accessibilityLabel(Text(phaseName))
+                    NavigationLink(value: MoonNavigation.slider(latitude: latitude, moonAge: moonAge)) {
+                        MoonRendererWatch(
+                            latitude: latitude,
+                            phasePercent: phasePercent,
+                            moonAge: moonAge,
+                            fullMoonCG: moonImage
+                        )
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 24, height: 24)
+                        .accessibilityLabel(Text(phaseName))
+                    }
+                    .buttonStyle(.plain)
                 } else {
                     ProgressView()
                         .frame(width: 24, height: 24)
                 }
             }
             .font(.footnote)
-            .onAppear {
-                if let image = UIImage(named: "fullmoon")?.cgImage {
-                    self.moonImage = image
-                }
-            }
         }
     }
 }
