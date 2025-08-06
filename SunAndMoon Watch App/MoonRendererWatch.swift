@@ -17,7 +17,7 @@ func MoonRendererWatch(
     moonAge: CGFloat,
     fullMoonCG: CGImage
 ) -> Image {
-    
+
     let width = fullMoonCG.width
     let height = fullMoonCG.height
     let colorSpace = CGColorSpaceCreateDeviceRGB()
@@ -27,7 +27,7 @@ func MoonRendererWatch(
     debugPrint("Phase Percent: \(String(format: "%.4f", phasePercent))")
     debugPrint("Moon Age: \(String(format: "%.2f", moonAge))")
     debugPrint("Full Moon Image Size: \(width)x\(height)")
-    
+
     guard let context = CGContext(
         data: nil,
         width: width,
@@ -41,19 +41,14 @@ func MoonRendererWatch(
         return Image(systemName: "moon.circle.fill")
     }
 
-    debugPrint("[MoonRendererWatch] CGContext created successfully")
-
-    // Draw the full moon base image
+    // Draw full moon base
     let drawRect = CGRect(x: 0, y: 0, width: width, height: height)
     context.draw(fullMoonCG, in: drawRect)
-    debugPrint("Full moon base image drawn in rect: \(drawRect)")
 
-    // Determine masking direction
+    // Determine direction
     let isWaxing = moonAge < 14.77
     let isSouthern = latitude < 0
     let isRightLit = (isWaxing && !isSouthern) || (!isWaxing && isSouthern)
-    
-    debugPrint("isWaxing: \(isWaxing), isSouthern: \(isSouthern), isRightLit: \(isRightLit)")
 
     // Shadow math
     let clampedPercent = max(0, min(1, phasePercent))
@@ -63,14 +58,15 @@ func MoonRendererWatch(
     debugPrint("Clamped Phase Percent: \(String(format: "%.4f", clampedPercent))")
     debugPrint("Shadow Amount: \(String(format: "%.4f", shadowAmount))")
     debugPrint("Offset: \(String(format: "%.2f", offset))")
+    debugPrint("isRightLit: \(isRightLit)")
 
-    // Define the full-size ellipse and slide it left or right
+    // Slide the shadow ellipse
     let ellipseWidth = CGFloat(width)
     let ellipseHeight = CGFloat(height)
     let shadowRect: CGRect
 
     if isRightLit {
-        // Mask slides left (shadow comes from left)
+        // Shadow slides left
         shadowRect = CGRect(
             x: (CGFloat(width) / 2) - offset,
             y: 0,
@@ -78,7 +74,7 @@ func MoonRendererWatch(
             height: ellipseHeight
         )
     } else {
-        // Mask slides right (shadow comes from right)
+        // Shadow slides right
         shadowRect = CGRect(
             x: (CGFloat(width) / 2) + offset - ellipseWidth,
             y: 0,
@@ -102,8 +98,6 @@ func MoonRendererWatch(
         debugPrint("[MoonRendererWatch] Failed to create masked CGImage")
         return Image(systemName: "moon.circle.fill")
     }
-
-    debugPrint("[MoonRendererWatch] Finished rendering successfully\n")
 
     return Image(decorative: maskedCGImage, scale: 1.0)
         .renderingMode(.original)
