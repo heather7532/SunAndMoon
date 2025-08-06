@@ -8,8 +8,13 @@
         <string>com.apple.widgetkit-extension</string>
         <key>NSExtensionAttributes</key>
         <dict>
-            <key>WKWatchOnly</key>
-            <true/>
+            <key>WKWidgetFamily</key>
+            <array>
+                <string>accessoryCircular</string>
+                <string>accessoryRectangular</string>
+                <string>accessoryInline</string>
+                <string>accessoryCorner</string>
+            </array>
         </dict>
     </dict>
 </dict>

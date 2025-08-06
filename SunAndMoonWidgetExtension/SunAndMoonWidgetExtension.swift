@@ -1,10 +1,3 @@
-//
-//  SunAndMoonWidgetExtension.swift
-//  SunAndMoonWidgetExtension
-//
-//  Created by Heather Gulledge on 8/2/25.
-//
-
 import WidgetKit
 import SwiftUI
 import CoreLocation
@@ -36,7 +29,7 @@ struct Provider: TimelineProvider {
 
     private func makeEntry(for date: Date) -> SimpleEntry {
         #if targetEnvironment(simulator)
-        let location = CLLocation(latitude: 38.8628, longitude: -90.8587) // Flint Hill fallback
+        let location = CLLocation(latitude: 38.8628, longitude: -90.8587)
         #else
         let locationManager = CLLocationManager()
         let location = locationManager.location ?? CLLocation(latitude: 38.8628, longitude: -90.8587)
@@ -79,22 +72,46 @@ struct SunAndMoonWidgetExtensionEntryView: View {
     var body: some View {
         switch widgetFamily {
         case .accessoryCircular:
-            Image(systemName: "sun.and.moon.fill")
+            Image("Complication")
                 .resizable()
                 .scaledToFit()
-                .padding(10)
-                .foregroundStyle(.white)
+                .padding(4)
 
         case .accessoryInline, .accessoryRectangular:
             if let timeInfo = computeTimeInfo(entry: entry) {
                 let minutes = Int(timeInfo.secondsRemaining / 60)
                 let hours = minutes / 60
                 let mins = minutes % 60
-                Text("\(hours)h \(mins)m")
-                    .font(.system(size: 16, weight: .medium))
+                Text(String(format: "%d:%02d", hours, mins))
+                    .font(.system(size: 16, weight: .heavy))
                     .foregroundColor(timeInfo.color)
             } else {
                 Text("--")
+            }
+
+        case .accessoryCorner:
+            ZStack {
+                AccessoryWidgetBackground()
+
+                Image("Complication")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 25, height: 25)
+                    .widgetAccentable()
+            }
+            .widgetLabel {
+                if let timeInfo = computeTimeInfo(entry: entry) {
+                    let minutes = Int(timeInfo.secondsRemaining / 60)
+                    let hours = minutes / 60
+                    let mins = minutes % 60
+                    let combined = String(format: "%d:%02d %@", hours, mins, timeInfo.label) // e.g., "1:45 to dusk"
+
+                    Text(combined.capitalized)
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(timeInfo.color)
+                } else {
+                    Text("--")
+                }
             }
 
         default:
@@ -105,6 +122,7 @@ struct SunAndMoonWidgetExtensionEntryView: View {
     struct TimeInfo {
         let secondsRemaining: TimeInterval
         let color: Color
+        let label: String
     }
 
     private func computeTimeInfo(entry: SimpleEntry) -> TimeInfo? {
@@ -112,32 +130,29 @@ struct SunAndMoonWidgetExtensionEntryView: View {
         let now = entry.date
 
         if now >= civilDawn && now < civilDusk {
-            // Daytime: until dusk
             let seconds = civilDusk.timeIntervalSince(now)
-            return TimeInfo(secondsRemaining: seconds, color: colorForSunAltitude(entry.sunAltitude))
+            return TimeInfo(secondsRemaining: seconds, color: colorForSunAltitude(entry.sunAltitude), label: "until dusk")
         } else {
-            // Nighttime: until next dawn
-            let targetDawn: Date = now < civilDawn
+            let targetDawn = now < civilDawn
                 ? civilDawn
                 : Calendar.current.date(byAdding: .day, value: 1, to: civilDawn) ?? civilDawn.addingTimeInterval(86400)
-
             let seconds = targetDawn.timeIntervalSince(now)
-            return TimeInfo(secondsRemaining: seconds, color: .white)
+            return TimeInfo(secondsRemaining: seconds, color: colorForSunAltitude(entry.sunAltitude), label: "until dawn")
         }
     }
 
     private func colorForSunAltitude(_ altitude: Double) -> Color {
         switch altitude {
         case let a where a >= 10:
-            return .yellow
+            return Color(red: 1.0, green: 1.0, blue: 0.44) // #ffff70
         case 0..<10:
             return .orange
         case -6..<0:
             return .pink
         case -12..<(-6):
-            return .purple
+            return Color(red: 0.835, green: 0.584, blue: 0.871) // #d595de
         case -18..<(-12):
-            return .blue
+            return Color(red: 0.204, green: 0.408, blue: 0.733) // #3468bb
         default:
             return .white
         }
@@ -160,7 +175,8 @@ struct SunAndMoonWidgetExtension: Widget {
         .supportedFamilies([
             .accessoryCircular,
             .accessoryRectangular,
-            .accessoryInline
+            .accessoryInline,
+            .accessoryCorner
         ])
     }
 }

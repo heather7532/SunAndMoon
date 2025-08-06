@@ -27,13 +27,9 @@ struct MainView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 8) {
-                Text("Sun & Moon Tracker")
-                    .font(.headline)
-                    .padding(.bottom, 4)
-
                 if let sun = sun, let moon = moon {
                     // Daylight section
-                    SectionHeader(title: "Daylight")
+                    SectionHeader(title: "Sun")
                     DataRow(label: "Nautical Dawn", value: sun.nauticalDawn.formattedTime())
                     DataRow(label: "Civil Dawn", value: sun.civilDawn.formattedTime())
                     DataRow(label: "Sunrise", value: sun.sunrise.formattedTime())
@@ -61,9 +57,9 @@ struct MainView: View {
                         highlight: isHeadingAligned(to: moon.azimuth)
                     )
                     DataRow(label: "Moon Altitude", value: formattedAngle(moon.altitude))
-                    DataRow(label: "Next New Moon", value: formattedDate(from: moon.nextNewMoon))
-                    DataRow(label: "Next Full Moon", value: formattedDate(from: moon.nextFullMoon))
-                    ValueRow(value: String(describing: moon.currentMoonPhase))
+                    DataRow(label: "New Moon", value: formattedDate(from: formattedDateFromNow(days: moon.nextNewMoon)))
+                    DataRow(label: "Full Moon", value: formattedDate(from: formattedDateFromNow(days: moon.nextFullMoon)))
+                    MoonPhaseRow(phase: moon.currentMoonPhase)
                 } else {
                     Text("Fetching location and data...")
                         .font(.footnote)
@@ -90,13 +86,61 @@ struct MainView: View {
 
     // MARK: - Helpers
     
+    struct ImageRow: View {
+        let label: String
+        let imageName: String
 
-
+        var body: some View {
+            HStack {
+                Text(label)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Image(imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .accessibilityLabel(Text(label))
+            }
+            .font(.footnote)
+        }
+    }
     
-    private func formattedDate(from seconds: Int?) -> String {
-        guard let seconds = seconds else { return "--:--" }
-        let date = Date().addingTimeInterval(TimeInterval(seconds))
-        return date.formattedTime()
+    private func formatPhaseName(_ rawValue: String) -> String {
+        rawValue
+            .replacingOccurrences(of: "([a-z])([A-Z])", with: "$1 $2", options: .regularExpression)
+            .capitalized
+    }
+    
+    private func imageNameForPhase(_ phase: String) -> String {
+        phase
+            .lowercased()
+            .replacingOccurrences(of: " ", with: "")
+    }
+    
+    private func formattedDate(from date: Date?) -> String {
+        guard let date = date else { return "--" }
+
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        let full = formatter.string(from: date)
+
+        let calendar = Calendar.current
+        let currentYear = calendar.component(.year, from: Date())
+        let dateYear = calendar.component(.year, from: date)
+
+        if currentYear == dateYear {
+            // Strip the year from the formatted date
+            return full.replacingOccurrences(of: String(currentYear), with: "")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+                .trimmingCharacters(in: CharacterSet(charactersIn: ",./-"))
+        } else {
+            return full
+        }
+    }
+
+    private func formattedDateFromNow(days: Int?) -> Date? {
+        guard let days = days else { return nil }
+        return Calendar.current.date(byAdding: .day, value: days, to: Date())
     }
     
     private func refreshAstronomyData() {
@@ -112,7 +156,38 @@ struct MainView: View {
 
     private func isHeadingAligned(to azimuth: Double?) -> Bool {
         guard let azimuth = azimuth else { return false }
-        return abs(heading - azimuth).truncatingRemainder(dividingBy: 360) <= 3
+        return abs(heading - azimuth).truncatingRemainder(dividingBy: 360) <= 5
+    }
+    
+    private func symbolNameForPhase(_ phase: MoonPhase) -> String {
+        phase.rawValue
+            .lowercased()
+            .replacingOccurrences(of: " ", with: ".")
+            .replacingOccurrences(of: "moon", with: "moonphase")
+    }
+
+    struct MoonPhaseRow: View {
+        let phase: MoonPhase
+
+        var body: some View {
+            HStack {
+                Text(phase.rawValue)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Image(systemName: symbolName(for: phase))
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .accessibilityLabel(Text(phase.rawValue))
+            }
+            .font(.footnote)
+        }
+
+        private func symbolName(for phase: MoonPhase) -> String {
+            let base = phase.rawValue
+                .lowercased()
+                .replacingOccurrences(of: " ", with: ".")
+            return "moonphase.\(base)"
+        }
     }
 }
 
