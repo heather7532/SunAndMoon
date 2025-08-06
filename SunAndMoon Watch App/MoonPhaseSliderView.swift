@@ -25,6 +25,7 @@ struct MoonPhaseSliderView: View {
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 80, height: 80)
+            .clipped() // This ensures the extended canvas doesn't visually overflow
 
             Slider(value: $simulatedAge, in: 0...synodicMonth, step: 1)
         }
