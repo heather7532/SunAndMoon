@@ -3,21 +3,21 @@ import CoreGraphics
 import CoreLocation
 import SwiftUI
 
-/// Renders a moon phase as a SwiftUI Image for watchOS using Core Graphics.
-///
+/// Renders a moon phase by overlaying a cropped shadow mask onto the full moon image.
 /// - Parameters:
 ///   - latitude: Latitude from GPS
 ///   - phasePercent: 0.0 to 1.0 (illuminated portion)
 ///   - moonAge: Moon age in days (0–29.5)
-///   - fullMoonCG: CGImage of the full moon texture (with transparency)
-/// - Returns: SwiftUI Image rendered with proper masking
+///   - fullMoonCG: Full moon image (CGImage with transparency)
+///   - shadowCG: Shadow image (a full circular black disc with slight transparency)
+/// - Returns: SwiftUI Image with correct phase rendering
 func MoonRendererWatch(
     latitude: CLLocationDegrees,
     phasePercent: CGFloat,
     moonAge: CGFloat,
-    fullMoonCG: CGImage
+    fullMoonCG: CGImage,
+    shadowCG: CGImage
 ) -> Image {
-
     let width = fullMoonCG.width
     let height = fullMoonCG.height
     let colorSpace = CGColorSpaceCreateDeviceRGB()
@@ -26,7 +26,6 @@ func MoonRendererWatch(
     debugPrint("Latitude: \(latitude)")
     debugPrint("Phase Percent: \(String(format: "%.4f", phasePercent))")
     debugPrint("Moon Age: \(String(format: "%.2f", moonAge))")
-    debugPrint("Full Moon Image Size: \(width)x\(height)")
 
     guard let context = CGContext(
         data: nil,
@@ -41,65 +40,64 @@ func MoonRendererWatch(
         return Image(systemName: "moon.circle.fill")
     }
 
-    // Draw full moon base
-    let drawRect = CGRect(x: 0, y: 0, width: width, height: height)
-    context.draw(fullMoonCG, in: drawRect)
+    let fullRect = CGRect(x: 0, y: 0, width: width, height: height)
+    context.draw(fullMoonCG, in: fullRect)
 
-    // Determine direction
+    // Clamp phasePercent between 0–1
+    let clamped = max(0, min(1, phasePercent))
+
+    // Handle new/full moon — skip overlay
+    if clamped <= 0.02 || clamped >= 0.98 {
+        debugPrint("Phase nearly full or new. Skipping shadow overlay.")
+        guard let finalCG = context.makeImage() else {
+            return Image(systemName: "moon.circle.fill")
+        }
+        return Image(decorative: finalCG, scale: 1.0)
+            .renderingMode(.original)
+            .interpolation(.none)
+    }
+
+    // Determine lit side
     let isWaxing = moonAge < 14.77
     let isSouthern = latitude < 0
-    let isRightLit = (isWaxing && !isSouthern) || (!isWaxing && isSouthern)
+    let isLeftLit = (isWaxing && !isSouthern) || (!isWaxing && isSouthern)
 
-    // Shadow math
-    let clampedPercent = max(0, min(1, phasePercent))
-    let shadowAmount = pow(1.0 - clampedPercent, 1.5)
-    let offset = CGFloat(shadowAmount) * CGFloat(width) / 2.0
+    let shadowWidth = CGFloat(width) * (1.0 - clamped)
+    let cropRect = CGRect(x: 0, y: 0, width: shadowWidth, height: CGFloat(height))  // Always crop from left
 
-    debugPrint("Clamped Phase Percent: \(String(format: "%.4f", clampedPercent))")
-    debugPrint("Shadow Amount: \(String(format: "%.4f", shadowAmount))")
-    debugPrint("Offset: \(String(format: "%.2f", offset))")
-    debugPrint("isRightLit: \(isRightLit)")
+    debugPrint("isWaxing: \(isWaxing)")
+    debugPrint("isSouthern: \(isSouthern)")
+    debugPrint("isLeftLit: \(isLeftLit)")
+    debugPrint("Shadow width: \(shadowWidth)")
+    debugPrint("Cropping shadow rect: \(cropRect)")
 
-    // Slide the shadow ellipse
-    let ellipseWidth = CGFloat(width)
-    let ellipseHeight = CGFloat(height)
-    let shadowRect: CGRect
-
-    if isRightLit {
-        // Shadow slides left
-        shadowRect = CGRect(
-            x: (CGFloat(width) / 2) - offset,
-            y: 0,
-            width: ellipseWidth,
-            height: ellipseHeight
-        )
-    } else {
-        // Shadow slides right
-        shadowRect = CGRect(
-            x: (CGFloat(width) / 2) + offset - ellipseWidth,
-            y: 0,
-            width: ellipseWidth,
-            height: ellipseHeight
-        )
-    }
-
-    debugPrint("Shadow Rect: \(shadowRect)")
-
-    if clampedPercent < 0.999 {
-        context.setBlendMode(.destinationOut)
-        context.setFillColor(CGColor(gray: 0.0, alpha: 1.0))
-        context.fillEllipse(in: shadowRect)
-        debugPrint("Applied shadow ellipse with destinationOut blend mode")
-    } else {
-        debugPrint("Phase is effectively full; skipping shadow ellipse")
-    }
-
-    guard let maskedCGImage = context.makeImage() else {
-        debugPrint("[MoonRendererWatch] Failed to create masked CGImage")
+    guard let croppedShadow = shadowCG.cropping(to: cropRect) else {
+        debugPrint("[MoonRendererWatch] Failed to crop shadow mask")
         return Image(systemName: "moon.circle.fill")
     }
 
-    return Image(decorative: maskedCGImage, scale: 1.0)
+    // Draw cropped shadow on correct side
+    context.saveGState()
+
+    if isLeftLit {
+        // Draw on right side
+        let destRect = CGRect(x: CGFloat(width) - shadowWidth, y: 0, width: shadowWidth, height: CGFloat(height))
+        context.draw(croppedShadow, in: destRect)
+    } else {
+        // Flip and draw on left side
+        context.translateBy(x: shadowWidth, y: 0)
+        context.scaleBy(x: -1.0, y: 1.0)
+        context.draw(croppedShadow, in: cropRect)
+    }
+
+    context.restoreGState()
+
+    guard let finalCG = context.makeImage() else {
+        debugPrint("[MoonRendererWatch] Failed to make final image")
+        return Image(systemName: "moon.circle.fill")
+    }
+
+    return Image(decorative: finalCG, scale: 1.0)
         .renderingMode(.original)
         .interpolation(.none)
 }

@@ -31,6 +31,7 @@ struct MainView: View {
     @State private var moon: Moon?
     @State private var navSelection: MoonNavigation?
     @State private var moonImage: CGImage?
+    @State private var shadowImage: CGImage?
 
     private let timeZone = TimeZone.current
     private var astronomyService: AstronomyService? {
@@ -78,6 +79,7 @@ struct MainView: View {
                             moonAge: CGFloat(moon.ageOfTheMoonInDays),
                             latitude: locationService.currentLocation?.coordinate.latitude ?? 0.0,
                             moonImage: moonImage,
+                            shadowImage: shadowImage
                         )
                     } else {
                         Text("Fetching location and data...")
@@ -90,12 +92,13 @@ struct MainView: View {
             }
             .navigationDestination(for: MoonNavigation.self) { selection in
                 switch selection {
-                case .slider(let latitude, let moonAge):
+                case .slider(let latitude, let moonAge, let shadowImage):
                     if let moonImage = moonImage {
                         MoonPhaseSliderView(
                             latitude: latitude,
                             fullMoonCG: moonImage,
-                            initialMoonAge: moonAge
+                            initialMoonAge: moonAge,
+                            fullMoonShadowCG: shadowImage!
                         )
                     } else {
                         Text("Moon image not available")
@@ -115,6 +118,9 @@ struct MainView: View {
 
             if let image = UIImage(named: "fullmoon")?.cgImage {
                 self.moonImage = image
+            }
+            if let shadow = UIImage(named: "fullmoon_shadow")?.cgImage {
+                self.shadowImage = shadow
             }
         }
         .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { _ in
@@ -199,43 +205,45 @@ struct MainView: View {
     
 
     enum MoonNavigation: Hashable {
-        case slider(latitude: CLLocationDegrees, moonAge: CGFloat)
+        case slider(latitude: CLLocationDegrees, moonAge: CGFloat, shadowImage: CGImage?)
     }
 
     struct MoonPhaseRow: View {
-        let phaseName: String
-        let phasePercent: CGFloat
-        let moonAge: CGFloat
-        let latitude: CLLocationDegrees
-        let moonImage: CGImage?
+            let phaseName: String
+            let phasePercent: CGFloat
+            let moonAge: CGFloat
+            let latitude: CLLocationDegrees
+            let moonImage: CGImage?
+            let shadowImage: CGImage?
 
-        var body: some View {
-            HStack {
-                Text(phaseName)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+            var body: some View {
+                HStack {
+                    Text(phaseName)
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
-                if let moonImage = moonImage {
-                    NavigationLink(value: MoonNavigation.slider(latitude: latitude, moonAge: moonAge)) {
-                        MoonRendererWatch(
-                            latitude: latitude,
-                            phasePercent: phasePercent,
-                            moonAge: moonAge,
-                            fullMoonCG: moonImage
-                        )
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 24, height: 24)
-                        .accessibilityLabel(Text(phaseName))
+                    if let moonImage = moonImage, let shadowImage = shadowImage {
+                        NavigationLink(value: MoonNavigation.slider(latitude: latitude, moonAge: moonAge, shadowImage: shadowImage )) {
+                            MoonRendererWatch(
+                                latitude: latitude,
+                                phasePercent: phasePercent,
+                                moonAge: moonAge,
+                                fullMoonCG: moonImage,
+                                shadowCG: shadowImage
+                            )
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 24, height: 24)
+                            .accessibilityLabel(Text(phaseName))
+                        }
+                        .buttonStyle(.plain)
+                    } else {
+                        ProgressView()
+                            .frame(width: 24, height: 24)
                     }
-                    .buttonStyle(.plain)
-                } else {
-                    ProgressView()
-                        .frame(width: 24, height: 24)
                 }
+                .font(.footnote)
             }
-            .font(.footnote)
         }
-    }
 }
 
 // MARK: - Helper Extensions

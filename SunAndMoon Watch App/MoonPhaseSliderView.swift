@@ -5,6 +5,7 @@ struct MoonPhaseSliderView: View {
     let latitude: CLLocationDegrees
     let fullMoonCG: CGImage
     let initialMoonAge: CGFloat
+    let fullMoonShadowCG: CGImage
 
     @State private var simulatedAge: Double = 0.0
 
@@ -20,14 +21,17 @@ struct MoonPhaseSliderView: View {
                 latitude: latitude,
                 phasePercent: phasePercent(for: simulatedAge),
                 moonAge: simulatedAge,
-                fullMoonCG: fullMoonCG
+                fullMoonCG: fullMoonCG,
+                shadowCG: fullMoonShadowCG,
             )
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 80, height: 80)
-            .clipped() // This ensures the extended canvas doesn't visually overflow
+            .clipped()
+            .animation(.easeInOut(duration: 0.3), value: simulatedAge)  // 👈 Animated redraw
 
             Slider(value: $simulatedAge, in: 0...synodicMonth, step: 1)
+                .padding(.horizontal)
         }
         .onAppear {
             simulatedAge = Double(initialMoonAge)
